@@ -1,7 +1,6 @@
----
 AWSTemplateFormatVersion: '2010-09-09'
 Description: |
-  This template builds an EC2 AMI based on Amazon Linux2 ARM64 and installs software to demonstrate an AWS CodePipeline driven AMI builing use-case using EC2 ImageBuilder. The automatically installed software includes the following packages: amazon-cloudwatch-agent-linux, aws-cli-version-2-linux, the stig-build-linux-high (https://docs.aws.amazon.com/imagebuilder/latest/userguide/toe-stig.html), and two custom components executing bash code. (qs-1tkj0sj93)
+  This template builds an EC2 AMI based on Amazon Linux2 ARM64 and installs software to demonstrate an AWS CodePipeline driven AMI building use-case using EC2 ImageBuilder. The automatically installed software includes the following packages: amazon-cloudwatch-agent-linux, aws-cli-version-2-linux, the stig-build-linux-high (https://docs.aws.amazon.com/imagebuilder/latest/userguide/toe-stig.html), and two custom components executing bash code. (qs-1tkj0sj93)
 Parameters:
   AWSRegion:
     Type: String
@@ -249,6 +248,16 @@ Resources:
       ManagedPolicyArns:
         - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore'
         - !Sub 'arn:${AWS::Partition}:iam::aws:policy/EC2InstanceProfileForImageBuilder'
+      Policies:
+        - PolicyName: CloudFormationDescribeStackEventsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cloudformation:DescribeStackEvents
+                Resource: '*'
+
 Outputs:
   ImageArn:
     Description: Reference to EC2 Image Builder Output Arn

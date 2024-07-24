@@ -237,31 +237,21 @@ Resources:
   EC2Role:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub '${AWS::StackName}'
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Action: sts:AssumeRole
-            Effect: Allow
+          - Effect: Allow
             Principal:
-              Service: !Sub 'ec2.${AWS::URLSuffix}'
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Path: /
       ManagedPolicyArns:
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore'
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/EC2InstanceProfileForImageBuilder'
-      Policies:
-        - PolicyName: CloudFormationDescribeStackEventsPolicy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - cloudformation:DescribeStackEvents
-                Resource: '*'
-
-Outputs:
-  ImageArn:
-    Description: Reference to EC2 Image Builder Output Arn
-    Value: !GetAtt 'LinuxImage.Arn'
-  ImageId:
-    Description: Reference to EC2 Image Builder Output ImageId
-    Value: !GetAtt 'LinuxImage.ImageId'
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+      RoleName: !Sub
+        - ${AWS::StackName}-Role-${Uniqueval}
+        - Uniqueval: !Select
+            - 2
+            - !Split
+              - /
+              - !Ref 'AWS::StackId'

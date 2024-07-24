@@ -8,7 +8,7 @@ Parameters:
   VpcId:
     Type: AWS::EC2::VPC::Id
     Description: VpcId of your existing Virtual Private Cloud (VPC) to be used to build the AMI
-    Default: vpc-014cf48035b0499bf  # Replace with your actual VPC ID
+    Default: vpc-014cf48035b0499bf
     ConstraintDescription: must be the VPC Id of an existing VPC
   SubnetId:
     Type: String
@@ -17,6 +17,7 @@ Parameters:
   SSHKeyPairName:
     Type: AWS::EC2::KeyPair::KeyName
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
+    Default: SAAKeyVirginia
     ConstraintDescription: must be the name of an existing EC2 KeyPair
   SSHLocation:
     Type: String
@@ -72,7 +73,7 @@ Resources:
         - Uniqueval: !Select
             - 2
             - !Split
-              - /
+              - '/'
               - !Ref 'AWS::StackId'
       Description: !Sub
         - ${ShortName} Image (${Architecture}) version ${Version}
@@ -108,7 +109,7 @@ Resources:
         - Uniqueval: !Select
             - 2
             - !Split
-              - /
+              - '/'
               - !Ref 'AWS::StackId'
       KeyPair: !Ref 'SSHKeyPairName'
       TerminateInstanceOnFailure: false
@@ -137,7 +138,7 @@ Resources:
         - Uniqueval: !Select
             - 2
             - !Split
-              - /
+              - '/'
               - !Ref 'AWS::StackId'
       Platform: Linux
       Version: !Sub '${Version}'
@@ -185,7 +186,7 @@ Resources:
         - Uniqueval: !Select
             - 2
             - !Split
-              - /
+              - '/'
               - !Ref 'AWS::StackId'
       Platform: Linux
       Version: !Sub '${Version}'
@@ -217,7 +218,7 @@ Resources:
         - Uniqueval: !Select
             - 2
             - !Split
-              - /
+              - '/'
               - !Ref 'AWS::StackId'
       GroupDescription: Enable SSH access via port 22
       SecurityGroupIngress:
@@ -254,5 +255,5 @@ Resources:
         - Uniqueval: !Select
             - 2
             - !Split
-              - /
+              - '/'
               - !Ref 'AWS::StackId'

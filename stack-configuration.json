@@ -5,8 +5,6 @@
     "SubnetId" : "subnet-0aec625c50abb76b8",
     "SSHKeyPairName" : "SAAKeyVirginia",
     "SSHLocation" : "0.0.0.0/0",
-    "Architecture" : "arm64",
-    "InstanceType" : "t4g.large",
     "BaseImageId" : "ami-047fb6d800866b9fe"
   }
 }

@@ -5,7 +5,7 @@
     "SubnetId" : "subnet-0aec625c50abb76b8",
     "SSHKeyPairName" : "SAAKeyVirginia",
     "SSHLocation" : "0.0.0.0/0",
-    "Architecture" : "x86_64",
+    "Architecture" : "x86",
     "InstanceType" : "t2.micro",
     "BaseImageId" : "ami-0427090fd1714168b"
   }

@@ -1,6 +1,7 @@
+---
 AWSTemplateFormatVersion: '2010-09-09'
 Description: |
-  This template builds an EC2 AMI based on Amazon Linux2 ARM64 and installs software to demonstrate an AWS CodePipeline driven AMI building use-case using EC2 ImageBuilder. The automatically installed software includes the following packages: amazon-cloudwatch-agent-linux, aws-cli-version-2-linux, the stig-build-linux-high (https://docs.aws.amazon.com/imagebuilder/latest/userguide/toe-stig.html), and two custom components executing bash code. (qs-1tkj0sj93)
+  This template builds an EC2 AMI based on Amazon Linux2 ARM64 and installs software to demonstrate an AWS CodePipeline driven AMI builing use-case using EC2 ImageBuilder. The automatically installed software includes the following packages: amazon-cloudwatch-agent-linux, aws-cli-version-2-linux, the stig-build-linux-high (https://docs.aws.amazon.com/imagebuilder/latest/userguide/toe-stig.html), and two custom components executing bash code. (qs-1tkj0sj93)
 Parameters:
   AWSRegion:
     Type: String
@@ -71,7 +72,7 @@ Resources:
         - Uniqueval: !Select
             - 2
             - !Split
-              - '/'
+              - /
               - !Ref 'AWS::StackId'
       Description: !Sub
         - ${ShortName} Image (${Architecture}) version ${Version}
@@ -107,7 +108,7 @@ Resources:
         - Uniqueval: !Select
             - 2
             - !Split
-              - '/'
+              - /
               - !Ref 'AWS::StackId'
       KeyPair: !Ref 'SSHKeyPairName'
       TerminateInstanceOnFailure: false
@@ -136,7 +137,7 @@ Resources:
         - Uniqueval: !Select
             - 2
             - !Split
-              - '/'
+              - /
               - !Ref 'AWS::StackId'
       Platform: Linux
       Version: !Sub '${Version}'
@@ -184,7 +185,7 @@ Resources:
         - Uniqueval: !Select
             - 2
             - !Split
-              - '/'
+              - /
               - !Ref 'AWS::StackId'
       Platform: Linux
       Version: !Sub '${Version}'
@@ -216,7 +217,7 @@ Resources:
         - Uniqueval: !Select
             - 2
             - !Split
-              - '/'
+              - /
               - !Ref 'AWS::StackId'
       GroupDescription: Enable SSH access via port 22
       SecurityGroupIngress:
@@ -237,21 +238,21 @@ Resources:
   EC2Role:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: !Sub '${AWS::StackName}'
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Effect: Allow
+          - Action: sts:AssumeRole
+            Effect: Allow
             Principal:
-              Service: ec2.amazonaws.com
-            Action: sts:AssumeRole
-      Path: /
+              Service: !Sub 'ec2.${AWS::URLSuffix}'
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
-        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-      RoleName: !Sub
-        - ${AWS::StackName}-Role-${Uniqueval}
-        - Uniqueval: !Select
-            - 2
-            - !Split
-              - '/'
-              - !Ref 'AWS::StackId'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/EC2InstanceProfileForImageBuilder'
+Outputs:
+  ImageArn:
+    Description: Reference to EC2 Image Builder Output Arn
+    Value: !GetAtt 'LinuxImage.Arn'
+  ImageId:
+    Description: Reference to EC2 Image Builder Output ImageId
+    Value: !GetAtt 'LinuxImage.ImageId'

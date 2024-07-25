@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: |
-  This template creates an EC2 AMI from a specified base AMI using EC2 Image Builder without any additional modifications.
+  This template creates an EC2 AMI from a specified base AMI using EC2 Image Builder with a minimal component.
 
 Parameters:
   AWSRegion:
@@ -24,13 +24,33 @@ Parameters:
     Description: AMI ID to use as the base image
 
 Resources:
+  MinimalComponent:
+    Type: AWS::ImageBuilder::Component
+    Properties:
+      Name: !Sub ${AWS::StackName}-Component-Minimal
+      Version: 1.0.0
+      Platform: Linux
+      Data: !Sub |
+        name: minimal component
+        description: A minimal component to satisfy the requirement
+        schemaVersion: 1.0
+        phases:
+          - name: build
+            steps:
+              - name: InstallBasicTools
+                action: ExecuteBash
+                inputs:
+                  commands:
+                    - echo "Minimal component running"
+
   ImageRecipe:
     Type: AWS::ImageBuilder::ImageRecipe
     Properties:
       Name: !Sub ${AWS::StackName}-ImageRecipe
       ParentImage: !Ref 'BaseImageId'
       Version: 1.0.0
-      Components: []
+      Components:
+        - ComponentArn: !GetAtt 'MinimalComponent.Arn'
 
   InfrastructureConfiguration:
     Type: AWS::ImageBuilder::InfrastructureConfiguration

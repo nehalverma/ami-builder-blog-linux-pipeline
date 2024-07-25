@@ -1,12 +1,12 @@
 {
   "Parameters" : {
-    "AWSRegion" : "eu-west-1",
-    "VpcId" : "vpc-12345678",
-    "SubnetId" : "subnet-12345678",
-    "SSHKeyPairName" : "sshkeypairname",
+    "AWSRegion" : "us-east-1",
+    "VpcId" : "vpc-014cf48035b0499bf",
+    "SubnetId" : "subnet-0aec625c50abb76b8",
+    "SSHKeyPairName" : "SAAKeyVirginia",
     "SSHLocation" : "0.0.0.0/0",
-    "Architecture" : "arm64",
-    "InstanceType" : "t4g.large",
-    "BaseImageId" : "ami-08182e5c2a7db8405"
+    "Architecture" : "x86_64",
+    "InstanceType" : "t2.micro",
+    "BaseImageId" : "ami-0427090fd1714168b"
   }
 }
